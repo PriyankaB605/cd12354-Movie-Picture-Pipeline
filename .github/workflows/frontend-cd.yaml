@@ -88,9 +88,13 @@ jobs:
         working-directory: starter/frontend
         run: npm ci
 
-      - name: Build frontend
+      - name: Run tests
         working-directory: starter/frontend
-        run: npm run build
+        run: CI=true npm test -- --watchAll=false
+
+      - name: Build frontend with Docker
+        working-directory: starter/frontend
+        run: docker build --build-arg REACT_APP_MOVIE_API_URL=http://backend -t frontend:${{ github.sha }} .
 
   deploy:
     name: Deploy Frontend
