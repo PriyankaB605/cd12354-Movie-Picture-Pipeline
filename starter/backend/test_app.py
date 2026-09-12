@@ -24,3 +24,20 @@ def test_movies_endpoint_returns_valid_data():
         assert isinstance(data.get("movies"), list)
         assert len(data["movies"]) > 0
         assert "title" in data["movies"][0]
+
+
+def test_movie_crud_routes():
+    with app.test_client() as client:
+        created = client.post(
+            "/movies", json={"title": "Test Movie", "description": "Test"}
+        )
+        assert created.status_code == 201
+        movie_id = created.get_json()["movie"]["id"]
+
+        updated = client.put(f"/movies/{movie_id}", json={"title": "Updated Movie"})
+        assert updated.status_code == 200
+        assert updated.get_json()["movie"]["title"] == "Updated Movie"
+
+        deleted = client.delete(f"/movies/{movie_id}")
+        assert deleted.status_code == 204
+        assert client.get(f"/movies/{movie_id}").status_code == 404

@@ -3,16 +3,22 @@ import axios from 'axios';
 
 function MovieDetail({ movie }) {
   const [details, setDetails] = useState(null);
+  const [error, setError] = useState(null);
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_MOVIE_API_URL}/movies/${movie.id}`).then((response) => {
-      setDetails(response.data);
-    });
+    setDetails(null);
+    setError(null);
+    axios
+      .get(`${process.env.REACT_APP_MOVIE_API_URL}/movies/${movie.id}`)
+      .then((response) => setDetails(response.data))
+      .catch(() => setError('Unable to load movie details.'));
   }, [movie]);
+
+  if (error) return <p role="alert">{error}</p>;
 
   return (
     <div>
-      <h2>{details?.movie.title}</h2>
-      <p>{details?.movie.description}</p>
+      {details && <h2>{details.movie.title}</h2>}
+      {details && <p>{details.movie.description}</p>}
     </div>
   );
 }

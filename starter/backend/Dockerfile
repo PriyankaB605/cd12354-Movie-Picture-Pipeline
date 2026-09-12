@@ -22,7 +22,8 @@ RUN mkdir -p /var/www/app
 COPY Pipfile* /app/
 
 RUN pipenv install --system --deploy
+RUN pip install --no-cache-dir uwsgi
 
 COPY . /app/
 
-CMD ["flask", "--app", ".", "run", "--host=0.0.0.0", "--port=5000"]
+CMD ["uwsgi", "--http", "0.0.0.0:5000", "--module", "app:app", "--master", "--die-on-term"]
