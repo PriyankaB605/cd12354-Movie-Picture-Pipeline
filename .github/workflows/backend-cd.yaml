@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'starter/backend/**'
+      - '.github/workflows/backend-cd.yaml'
   workflow_dispatch:
 
 env:
