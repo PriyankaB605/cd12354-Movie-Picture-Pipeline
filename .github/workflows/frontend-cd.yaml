@@ -9,6 +9,9 @@ on:
       - '.github/workflows/frontend-cd.yaml'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 env:
   AWS_REGION: us-east-1
   EKS_CLUSTER_NAME: cluster
